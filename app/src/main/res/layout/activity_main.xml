@@ -4,10 +4,16 @@
     android:id="@+id/activity_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context="com.wpy.regioncustom.MainActivity">
 
     <com.wpy.regioncustom.Circle
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        app:smallCircleRadius="200"
+        app:circleRadius="350"
+        app:circleColor="@color/circleColor"
+        app:TextView="圆环"
+        app:textSize="50"
         />
 </RelativeLayout>

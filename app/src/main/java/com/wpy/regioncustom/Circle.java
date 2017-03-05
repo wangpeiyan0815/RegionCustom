@@ -1,6 +1,7 @@
 package com.wpy.regioncustom;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -32,6 +33,11 @@ public class Circle extends View {
 
     private int width;
     private int height;
+    private int circleRadius;
+    private int smallCircleRadius;
+    private String textView;
+    private int circleColor;
+    private int textSize;
 
     public Circle(Context context) {
         super(context);
@@ -40,6 +46,13 @@ public class Circle extends View {
     public Circle(Context context, AttributeSet attrs) {
         super(context, attrs);
         intiView();
+        //获取自定义属性
+        TypedArray array = context.obtainStyledAttributes(attrs,R.styleable.Circle);
+        circleRadius = array.getInteger(R.styleable.Circle_circleRadius, 350);
+        smallCircleRadius = array.getInteger(R.styleable.Circle_smallCircleRadius, 200);
+        textView = array.getString(R.styleable.Circle_TextView);
+        circleColor = array.getColor(R.styleable.Circle_circleColor, Color.YELLOW);
+        textSize = array.getInteger(R.styleable.Circle_textSize, 50);
     }
 
     //初始化操作
@@ -72,14 +85,14 @@ public class Circle extends View {
         rectRegion.setPath(rectPaht, globalRegion);
 
         //绘中间圆
-        circlePaht.addCircle(w / 2, h / 2, 350, Path.Direction.CW);
+        circlePaht.addCircle(w / 2, h / 2, circleRadius, Path.Direction.CW);
         // ▼将剪裁边界设置为视图大小
         Region circle_Region = new Region(-w, -h, w, h);
         // ▼将 Path 添加到 Region 中
         circleRegion.setPath(circlePaht, circle_Region);
 
         //绘小圆
-        smallPaht.addCircle(w / 2, h / 2, 200, Path.Direction.CW);
+        smallPaht.addCircle(w / 2, h / 2, smallCircleRadius, Path.Direction.CW);
         // ▼将剪裁边界设置为视图大小
         Region small_Region = new Region(-w, -h, w, h);
         // ▼将 Path 添加到 Region 中
@@ -96,20 +109,20 @@ public class Circle extends View {
         canvas.drawPath(rect_Path, rectPaint);
         //绘圆
         Path circle_Path = circlePaht;
-        circlePaint.setColor(Color.YELLOW);
+        circlePaint.setColor(circleColor);
         canvas.drawPath(circle_Path, circlePaint);
         //绘小圆
         Path small_Path = smallPaht;
         smallPaint.setColor(Color.WHITE);
         canvas.drawPath(small_Path, smallPaint);
         //绘文字
-        textPaint.setTextSize(60);
+        textPaint.setTextSize(textSize);
         textPaint.setColor(Color.BLACK);
-        float yuan = textPaint.measureText("圆环");
+        float yuan = textPaint.measureText(textView);
         Paint.FontMetrics metrics = textPaint.getFontMetrics();
         //文字高度
         float ceil = (float) Math.ceil(metrics.descent - metrics.ascent);
-        canvas.drawText("圆环", width/2-yuan/2,height/2+ceil/2,textPaint);
+        canvas.drawText(textView, width/2-yuan/2,height/2+ceil/2,textPaint);
     }
 
     @Override
